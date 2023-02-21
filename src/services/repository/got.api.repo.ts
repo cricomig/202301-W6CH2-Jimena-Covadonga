@@ -5,10 +5,10 @@ export interface CharacterApiRepoStructure {
   update(character: Partial<CharacterStructure>): Promise<CharacterStructure>;
 }
 
-export class CharacterApiRepo {
+export class GotApiRepo {
   url: string;
   constructor() {
-    this.url = "http://localhost:5080/characters";
+    this.url = "http://localhost:4200";
   }
 
   async loadCharacters(): Promise<CharacterStructure[]> {
