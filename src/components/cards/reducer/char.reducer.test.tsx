@@ -1,8 +1,16 @@
 import { CharacterStructure } from "../../../models/characters";
+import {
+  CharacterApiRepoStructure,
+  GotApiRepo,
+} from "../../../services/repository/got.api.repo";
 import { loadCreator, updateCreator } from "./char.actions.creator";
 import { charReducer } from "./char.reducer";
 
 describe("Given the Characters reducer ", () => {
+  let repo: GotApiRepo;
+  beforeEach(() => {
+    repo = new GotApiRepo();
+  });
   describe("When we mock the characters ", () => {
     const mockCharacter: CharacterStructure[] = [
       {
@@ -53,13 +61,20 @@ describe("Given the Characters reducer ", () => {
       });
     });
 
-    describe("When we use addDefaultCase", () => {
-      test(" Then give the same state", () => {
-        const initialState = undefined;
-        const action = { type: "" };
-        const result = charReducer(initialState, action);
-        expect(result).toEqual([]);
+    test(" Then if we don't receive a response by the api", async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        json: jest.fn().mockResolvedValue(null),
       });
+
+      await expect(repo.update({})).rejects.toThrow("Error Http");
+    });
+
+    test(" Then if we don't receive a response by the api", async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        json: jest.fn().mockResolvedValue(null),
+      });
+
+      await expect(repo.loadCharacters({})).rejects.toThrow("Error Http");
     });
   });
 });
